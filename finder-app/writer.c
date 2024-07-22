@@ -17,12 +17,14 @@ static int RunMain(const char *argv[], FILE *file)
     file = fopen(writefile, "w");
     if (!file)
     {
-        syslog(LOG_USER, "Failed to open the file '%s'", writefile);
+        syslog(LOG_ERR, "Failed to open the file '%s'", writefile);
         return EXIT_ERROR;
     }
+
+    syslog(LOG_DEBUG, "Writing '%s' to '%s'", writestr, writefile);
     if (fwrite(writestr, sizeof(char), writestr_len, file) != writestr_len)
     {
-        syslog(LOG_USER, "Failed to write the string '%s' to the file '%s'", writestr, writefile);
+        syslog(LOG_ERR, "Failed to write the string '%s' to the file '%s'", writestr, writefile);
         return EXIT_ERROR;
     }
     return 0;
@@ -30,9 +32,11 @@ static int RunMain(const char *argv[], FILE *file)
 
 int main(const int argc, const char *argv[])
 {
+    openlog(argv[0], LOG_PID, LOG_USER);
+
     if (argc != 3)
     {
-        syslog(LOG_USER, "Invalid number of command-line arguments");
+        syslog(LOG_ERR, "Invalid number of command-line arguments");
         return EXIT_ERROR;
     }
 
@@ -43,9 +47,10 @@ int main(const int argc, const char *argv[])
     // Clean-up
     if (file && fclose(file))
     {
-        syslog(LOG_USER, "Failed to close the file");
+        syslog(LOG_ERR, "Failed to close the file");
         return_value = EXIT_ERROR;
     }
+    closelog();
 
     return return_value;
 }
