@@ -6,7 +6,7 @@ endif
 
 CFLAGS = -Wall -Wextra -Werror -std=c11
 TARGET = writer
-SRC = finder-app/writer.c
+SRC = writer.c
 
 all: $(TARGET)
 
