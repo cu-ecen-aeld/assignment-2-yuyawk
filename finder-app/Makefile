@@ -4,7 +4,7 @@ else
 CC = gcc
 endif
 
-CFLAGS = -Wall -Wextra -Werror -std=c11
+CFLAGS = -Wall -Wextra -Werror -pedantic-errors -std=c11
 TARGET = writer
 SRC = writer.c
 
